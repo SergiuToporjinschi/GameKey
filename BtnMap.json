@@ -1,0 +1,32 @@
+{
+	"buttons": {
+		"btn11": "1",
+		"btn12": "2",
+		"btn13": "3",
+		"btn14": "4",
+		"btn21": "5",
+		"btn22": "6",
+		"btn23": "7",
+		"btn24": "8"
+	},
+	"joystick": {
+		"slowProcentage" : 100,
+		"btn": "",
+		"forward": {
+			"slow":"w",
+			"fast":"SHIFT:w"
+		},
+		"back": {
+			"slow":"s",
+			"fast":"SHIFT:s"
+		},
+		"left": {
+			"slow":"a",
+			"fast":"SHIFT:a"
+		},
+		"right": {
+			"slow":"d",
+			"fast":"SHIFT:d"
+		}
+	}
+}

@@ -1,0 +1,18 @@
+{
+    "buttons": [
+        {"btn11": {"gpio": 5}},
+        {"btn12": {"gpio": 4}},
+        {"btn13": {"gpio": 3}},
+        {"btn14": {"gpio": 2}},
+        {"btn21": {"gpio": 13}},
+        {"btn22": {"gpio": 12}},
+        {"btn23": {"gpio": 11}},
+        {"btn24": {"gpio": 10}}
+    ],
+    "joystick": {
+        "trashHold": 10,
+        "x": {"gpio": 0, "-" : "back", "+": "forward"},
+        "y": {"gpio": 1, "-" : "left", "+": "right"},
+        "btn": {"gpio": 22}
+    }
+}
