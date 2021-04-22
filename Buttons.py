@@ -2,102 +2,17 @@ import json
 import time
 import Pins
 
-import digitalio
-from analogio import AnalogIn
-
-
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
 from adafruit_hid.keycode import Keycode
 
+from GameKey.Buttons import Buttons
+from GameKey.Joystick import Joystick
+
 time.sleep(1)
 keyboard = Keyboard(usb_hid.devices)
-
-
-class Button:
-
-    def __init__(self, data, name):
-        self.name = name
-        print('Initializing button: ' + name)
-        print('Pin: ' + str(data['gpio']))
-        self.pin = digitalio.DigitalInOut(Pins.Digital[data['gpio']])
-        self.pin.direction = digitalio.Direction.INPUT
-        self.pin.pull = digitalio.Pull.DOWN
-
-    def pressed(self):
-        keyboard_layout.write('d')
-
-    def released(self):
-        keyboard_layout.write('u')
-
-class Buttons:
-    btns = []
-    def __init__(self, config):
-        self.config = config
-        self.initButtons()
-        self.keypressed = []
-
-    def initButtons(self):
-        btnCnt = 0
-        for i in self.config:
-            name = next(iter(i.keys()))
-            self.btns.append(Button(i[name], name))
-            btnCnt = btnCnt + 1
-
-    def scanButtons(self):
-        ret = []
-        for btn in self.btns:
-            if btn.pin.value:
-                ret.append(btn.name)
-        return ret
-
-class Joystick:
-    axes = []
-    def __init__(self, config):
-        self.config = config
-        self.init()
-
-    #initialize joystick
-    def init(self):
-        axex = type('', (), {})
-        axex.pin = AnalogIn(Pins.Analog[self.config['x']['gpio']])
-        axex.name = 'x'
-        self.axes.append(axex)
-        axey = type('', (), {})
-        axey.pin = AnalogIn(Pins.Analog[self.config['y']['gpio']])
-        axey.name = 'y'
-        self.axes.append(axey)
-        self.btn = digitalio.DigitalInOut(Pins.Digital[self.config['btn']['gpio']])
-        self.btn.direction = digitalio.Direction.INPUT
-        self.btn.pull = digitalio.Pull.UP
-
-    def getValue(self, value):
-        value = round((value/65535)*100)
-        if value < 50:
-            value = (100 - value) * -1
-        elif value == 50:
-            value = 0
-        elif value > 50:
-            value = (value - 50) *2
-
-        if abs(value) < self.config['trashHold']:
-            value = 0
-        return value
-
-    def scanJoystick(self):
-        # print(self.btn.value)
-        ret = []
-        for axe in self.axes:
-            axeValue = self.getValue(axe.pin.value)
-            if axeValue != 0:
-                direction = "+"
-                if axeValue < 0:
-                    direction = "-"
-                ret.append("{0}:{1}".format(self.config[axe.name][direction], str(abs(axeValue))))
-        if not self.btn.value:
-            ret.append(btn.name)
-        return ret
+print('hello')
 
 class ConvertToKeys:
     def __init__(self, mapFileName):
@@ -152,6 +67,7 @@ class ConvertToKeys:
         return ret
 
 kb = KeyboardLayoutUS(keyboard)
+
 def sendKeys(keys):
     strToSend = ""
     for i in keys:
