@@ -79,7 +79,7 @@ def sendKeys(keys):
             strToSend = strToSend + 'Keycode.{0},'.format(i.upper())
     print(strToSend)
     eval('keyboard.press({0})'.format(strToSend))
-#
+
 
 
 convertor = ConvertToKeys('BtnMap.json')
