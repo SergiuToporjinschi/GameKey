@@ -22,7 +22,6 @@ class ConvertToKeys:
             keys = usbKeyCodes['keys'].copy()
             self.keyCodes = usbKeyCodes['modifiers']
             self.keyCodes.update(keys)
-            print(self.keyCodes)
 
         with open(mapFileName, 'r') as j:
             mapping = json.load(j)
@@ -80,7 +79,7 @@ class ConvertToKeys:
         ret = []
         for k in keyList:
             print(k)
-            ret.append(self.keyCodes[k])
+            ret.append(int(self.keyCodes[k], 16))
         return ret
 
 
@@ -96,7 +95,7 @@ def sendKeys(keys):
             key = i.split(":")[1]
 
             keys = convertor.convertToUSBCode(modifier, key)
-            print(keys)
+            keyboard.press(*keys)
             # print("{0}:{1}".format(keys[0], keys[1]))
             # kb._char_to_keycode()
             # strToSend = strToSend + 'Keycode.SHIFT, Keycode.{0},'.format(val.upper())
