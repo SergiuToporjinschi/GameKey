@@ -87,16 +87,16 @@ convertor = ConvertToKeys('BtnMap.json', 'USBKeyCodes.json')
 
 
 def sendKeys(keys):
-    strToSend = ""
+    toSend = []
     for i in keys:
         if ':' in i:
             modifier = i.split(':')[0]
             key = i.split(":")[1]
-            keys = convertor.convertToUSBCode(modifier, key)
-            keyboard.press(*keys)
+            toSend = toSend + convertor.convertToUSBCode(modifier, key)
         else:
-            keys = convertor.convertToUSBCode(i.lower())
-            keyboard.press(*keys)
+            toSend = toSend + convertor.convertToUSBCode(i.lower())
+    keyboard.press(*toSend)
+    print(toSend)
 
 
 btnMap = ""
