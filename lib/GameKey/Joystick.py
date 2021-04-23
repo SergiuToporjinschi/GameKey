@@ -109,7 +109,7 @@ class JoystickCalibration:
         self.calibration['XMax'] = self.__calibrate(self.joystick.axes[0])  # calibrate XMax
         self.__delLast(3)
         if self.calibration['XMax'] > procentageOkPlus : result = " OK "
-        else: result = "NOT OK!!!!!"
+        else: result = " NOT OK!!!!!"
         self.kbLayout.write(str(self.calibration['XMax']) + result + " \n")
         self.kbLayout.write('Thank you! Release it now \n')
 
@@ -120,7 +120,7 @@ class JoystickCalibration:
         self.calibration['XMin'] = self.__calibrate(self.joystick.axes[0])  # calibrate XMin
         self.__delLast(3)
         if self.calibration['XMin'] < procentageOkMinus : result = " OK "
-        else: result = "NOT OK!!!!!"
+        else: result = " NOT OK!!!!!"
         self.kbLayout.write(str(self.calibration['XMin']) + result + "\n")
 
         self.kbLayout.write('Thank you! Release it now \n')
@@ -144,7 +144,7 @@ class JoystickCalibration:
         self.calibration['YMin'] = self.__calibrate(self.joystick.axes[1])  # calibrate YMin
         self.__delLast(3)
         if self.calibration['XMin'] < procentageOkMinus : result = " OK "
-        else: result = "NOT OK!!!!!"
+        else: result = " NOT OK!!!!!"
         self.kbLayout.write(str(self.calibration['YMin']) + result + " \n")
 
         self.kbLayout.write('Thank you! I`m done here \n')
