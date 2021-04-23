@@ -1,5 +1,5 @@
 {
-	"Modifiers": {
+	"modifiers": {
 		"LEFT_CONTROL": "0xE0",
 		"CONTROL": "0xE0",
 		"LEFT_SHIFT": "0xE1",
@@ -14,7 +14,7 @@
 		"RIGHT_ALT": "0xE6",
 		"RIGHT_GUI": "0xE7"
 	},
-	"Keys": {
+	"keys": {
 		"a": "0x04",
 		"b": "0x05",
 		"c": "0x06",

@@ -14,8 +14,16 @@ time.sleep(1)
 keyboard = Keyboard(usb_hid.devices)
 print('hello')
 
+
 class ConvertToKeys:
-    def __init__(self, mapFileName):
+    def __init__(self, mapFileName, usbKeyCodes):
+        with open(usbKeyCodes, 'r') as j:
+            usbKeyCodes = json.load(j)
+            keys = usbKeyCodes['keys'].copy()
+            self.keyCodes = usbKeyCodes['modifiers']
+            self.keyCodes.update(keys)
+            print(self.keyCodes)
+
         with open(mapFileName, 'r') as j:
             mapping = json.load(j)
             self.btnMap = mapping['buttons']
@@ -29,11 +37,12 @@ class ConvertToKeys:
 
         if not 'slowProcentage' in self.joyMap:
             print('Set "slowProcentage" with default (90%) ')
-            self.joyMap['slowProcentage'] =  90
+            self.joyMap['slowProcentage'] = 90
 
-        for key, value  in self.btnMap.items():
+        for key, value in self.btnMap.items():
             if not isinstance(value, str) and not isinstance(value, list):
-                print('Remove buttons\[{0}:{1}]: not valid type'.format(key, value))
+                print(
+                    'Remove buttons\[{0}:{1}]: not valid type'.format(key, value))
                 del self.btnMap[key]
 
     def convert(self, btns, joys):
@@ -47,7 +56,8 @@ class ConvertToKeys:
     def convertBtn(self, keys):
         ret = []
         for key in keys:
-            if not key in self.btnMap: continue
+            if not key in self.btnMap:
+                continue
             if isinstance(self.btnMap[key], str):
                 ret.append(self.btnMap[key])
             elif isinstance(self.btnMap[key], list):
@@ -66,23 +76,35 @@ class ConvertToKeys:
                     ret.append(self.joyMap[key]['fast'])
         return ret
 
+    def convertToUSBCode(self, *keyList):
+        ret = []
+        for k in keyList:
+            print(k)
+            ret.append(self.keyCodes[k])
+        return ret
+
+
 kb = KeyboardLayoutUS(keyboard)
+convertor = ConvertToKeys('BtnMap.json', 'USBKeyCodes.json')
+
 
 def sendKeys(keys):
     strToSend = ""
     for i in keys:
-        if 'SHIFT' in i:
-            val = i.split(':')[1]
+        if ':' in i:
+            modifier = i.split(':')[0]
+            key = i.split(":")[1]
+
+            keys = convertor.convertToUSBCode(modifier, key)
+            print(keys)
+            # print("{0}:{1}".format(keys[0], keys[1]))
             # kb._char_to_keycode()
-            strToSend = strToSend + 'Keycode.SHIFT, Keycode.{0},'.format(val.upper())
+            # strToSend = strToSend + 'Keycode.SHIFT, Keycode.{0},'.format(val.upper())
         else:
             strToSend = strToSend + 'Keycode.{0},'.format(i.upper())
     print(strToSend)
     eval('keyboard.press({0})'.format(strToSend))
 
-
-
-convertor = ConvertToKeys('BtnMap.json')
 
 btnMap = ""
 
