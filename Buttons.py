@@ -78,7 +78,6 @@ class ConvertToKeys:
     def convertToUSBCode(self, *keyList):
         ret = []
         for k in keyList:
-            print(k)
             ret.append(int(self.keyCodes[k], 16))
         return ret
 
@@ -93,16 +92,11 @@ def sendKeys(keys):
         if ':' in i:
             modifier = i.split(':')[0]
             key = i.split(":")[1]
-
             keys = convertor.convertToUSBCode(modifier, key)
             keyboard.press(*keys)
-            # print("{0}:{1}".format(keys[0], keys[1]))
-            # kb._char_to_keycode()
-            # strToSend = strToSend + 'Keycode.SHIFT, Keycode.{0},'.format(val.upper())
         else:
-            strToSend = strToSend + 'Keycode.{0},'.format(i.upper())
-    print(strToSend)
-    eval('keyboard.press({0})'.format(strToSend))
+            keys = convertor.convertToUSBCode(i.lower())
+            keyboard.press(*keys)
 
 
 btnMap = ""
