@@ -13,6 +13,14 @@
         "trashHold": 10,
         "x": {"gpio": 0, "-" : "back", "+": "forward"},
         "y": {"gpio": 1, "-" : "left", "+": "right"},
-        "btn": {"gpio": 22}
+        "btn": {"gpio": 22},
+        "calibration": {
+            "X0": 32463,
+            "Y0": 32222,
+            "XMax": 65520,
+            "XMin": 252,
+            "YMax": 65520,
+            "YMin": 241
+        }
     }
 }

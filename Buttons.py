@@ -4,16 +4,13 @@ import Pins
 
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
-from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
-from adafruit_hid.keycode import Keycode
+# from adafruit_hid.keycode import Keycode
 
 from GameKey.Buttons import Buttons
 from GameKey.Joystick import Joystick
+from GameKey.Joystick import JoystickCalibration
 
-time.sleep(1)
 keyboard = Keyboard(usb_hid.devices)
-print('hello')
-
 
 class ConvertToKeys:
     def __init__(self, mapFileName, usbKeyCodes):
@@ -81,12 +78,11 @@ class ConvertToKeys:
             ret.append(int(self.keyCodes[k], 16))
         return ret
 
+def loadConfig():
+    with open('Pins.json', 'r') as j:
+        return json.load(j)
 
-kb = KeyboardLayoutUS(keyboard)
-convertor = ConvertToKeys('BtnMap.json', 'USBKeyCodes.json')
-
-
-def sendKeys(keys):
+def sendKeys(keys, convertor):
     toSend = []
     for i in keys:
         if ':' in i:
@@ -95,18 +91,21 @@ def sendKeys(keys):
             toSend = toSend + convertor.convertToUSBCode(modifier, key)
         else:
             toSend = toSend + convertor.convertToUSBCode(i.lower())
-    keyboard.press(*toSend)
-    print(toSend)
+    # keyboard.press(*toSend)
 
 
-btnMap = ""
 
-config = 0
-with open('Pins.json', 'r') as j:
-    config = json.load(j)
-
+config = loadConfig()
+convertor = ConvertToKeys('BtnMap.json', 'USBKeyCodes.json')
 btns = Buttons(config['buttons'])
 joy = Joystick(config['joystick'])
+calibration = JoystickCalibration(joy, keyboard)
+
+# Start calibration if need it
+bts = btns.scanButtons()
+if len(bts) > 2:
+    calibration.beginCalibration()
+#end calibration
 
 lastOut = []
 lastLen = 0
@@ -116,7 +115,6 @@ while True:
     if set(lastOut) != set(out):
         keyboard.release_all()
         if len(out) > 0:
-            print(out)
             sendKeys(out)
             lastOut = out
         elif lastLen != len(out):
